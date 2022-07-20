@@ -25,3 +25,24 @@ exports.create = async (req, res) => {
     return res.status(500).send({ error: e.message || e });
   }
 }
+
+exports.update = async (req, res) =>{
+  try {
+    const { id } = req.params
+  const newInstructor = req.body
+
+  const instructor = await knex.select('*').from('instructors').where({id}).first()
+  
+  
+  if(!instructor){
+    return res.status(400).send({status: `não foi encontrado um professor com o id${id}`})
+  }
+  await knex.update(newInstructor).from('instructors').where({id})
+
+  const instructorUpdated = await knex.select('*').from('instructors').where({id}).first()
+  return res.status(200).send(instructorUpdated)
+
+  } catch (e) {
+    return res.status(500).send({error: e.message || e})
+  }
+}
