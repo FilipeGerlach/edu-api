@@ -2,7 +2,8 @@ module.exports = {
   development: {
     client: 'sqlite3',
     connection: {
-      filename: 'development.sqlite3'
+      filename: 'development.sqlite3',
+      
     },
     pool: {
       afterCreate: function(connection, cb) {

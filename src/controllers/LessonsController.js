@@ -1,6 +1,16 @@
 const knex = require('../databases/knex');
 const fieldValidator = require('../utils/FieldValidator');
 
+
+exports.find = async(req, res) => {
+  try {
+    const lessons = await knex.select('*').from('lessons')
+
+    return res.status(200).send(lessons)
+  } catch (e) {
+    return res.status(500).send({ error: e.message || e });
+  }
+}
 exports.create = async (req, res) => {
   try {
     const invalidFields = fieldValidator(
@@ -106,17 +116,7 @@ exports.findById = async (req, res) =>{
   }
 }
 
-exports.update = async (req, res) =>{
-  try {
-    const {id} = res.params
 
-    const lessons = await knex.select('*').from('lessons').where({id}).first()
-
-
-  } catch (e) {
-    return res.status(500).send({error: e.message || e})
-  }
-}
 exports.deleteLessons = async(request, response)=>{
   try {
     const params = request.params
@@ -126,7 +126,7 @@ exports.deleteLessons = async(request, response)=>{
       return response.status(404).send('não encontrado')
     }
     await knex.delete({title:excluir.title}).from('lessons').where({id:excluir.id})
-    return response.status(200).send({status:"deletado"})
+    return response.status(204).send({status:"deletado"})
     
   } catch (e) {
     return response.status(500).send({error: e?.message || e})

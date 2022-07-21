@@ -25,6 +25,15 @@ exports.create = async (req, res) => {
     return res.status(500).send({ error: e.message || e });
   }
 }
+exports.find = async(req, res) =>{
+  try {
+    const instructor = await knex.select('*').from('instructors')
+
+    return res.status(200).send(instructor)
+  } catch (e) {
+    return res.status(500).send({ error: e.message || e });
+  }
+}
 
 exports.update = async (req, res) =>{
   try {
@@ -56,9 +65,24 @@ exports.deleteInstructor = async(request, response)=>{
       return response.status(404).send('não encontrado')
     }
     await knex.delete({title:excluir.title}).from('instructors').where({id:excluir.id})
-    return response.status(200).send({status:"deletado"})
+    return response.status(204).send({status:"deletado"})
     
   } catch (e) {
     return response.status(500).send({error: e?.message || e})
+  }
+}
+exports.findById= async (req, res) =>{
+  try {
+    const {id} = req.params
+    const instructor = await knex.select('*').from('instructors').where({id}).first()
+    
+    if(!instructor){
+      return res.status(404).send({satatus:`instrutor com o id ${id}não encontrado`})
+    }
+
+    return res.status(200).send(instructor)
+
+  } catch (e) {
+    return res.status(500).send({error: e.message || e})
   }
 }

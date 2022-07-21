@@ -90,7 +90,7 @@ exports.deleteCourse = async(request, response)=>{
       return response.status(404).send('não encontrado')
     }
     await knex.delete({title:excluir.title}).from('courses').where({id:excluir.id})
-    return response.status(200).send({status:"deletado"})
+    return response.status(204).send({status:"deletado"})
     
   } catch (e) {
     return response.status(500).send({error: e?.message || e})
