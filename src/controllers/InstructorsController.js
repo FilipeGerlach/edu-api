@@ -37,6 +37,7 @@ exports.update = async (req, res) =>{
   if(!instructor){
     return res.status(400).send({status: `não foi encontrado um professor com o id${id}`})
   }
+  
   await knex.update(newInstructor).from('instructors').where({id})
 
   const instructorUpdated = await knex.select('*').from('instructors').where({id}).first()
@@ -44,5 +45,20 @@ exports.update = async (req, res) =>{
 
   } catch (e) {
     return res.status(500).send({error: e.message || e})
+  }
+}
+exports.deleteInstructor = async(request, response)=>{
+  try {
+    const params = request.params
+    const [excluir] = await knex.select('*').from('instructors').where({id:params.id}).limit(1)
+
+    if(!excluir){
+      return response.status(404).send('não encontrado')
+    }
+    await knex.delete({title:excluir.title}).from('instructors').where({id:excluir.id})
+    return response.status(200).send({status:"deletado"})
+    
+  } catch (e) {
+    return response.status(500).send({error: e?.message || e})
   }
 }

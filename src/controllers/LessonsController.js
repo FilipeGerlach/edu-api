@@ -105,3 +105,30 @@ exports.findById = async (req, res) =>{
     return res.status(500).send({ error: e.message || e})
   }
 }
+
+exports.update = async (req, res) =>{
+  try {
+    const {id} = res.params
+
+    const lessons = await knex.select('*').from('lessons').where({id}).first()
+
+
+  } catch (e) {
+    return res.status(500).send({error: e.message || e})
+  }
+}
+exports.deleteLessons = async(request, response)=>{
+  try {
+    const params = request.params
+    const [excluir] = await knex.select('*').from('lessons').where({id:params.id}).limit(1)
+
+    if(!excluir){
+      return response.status(404).send('não encontrado')
+    }
+    await knex.delete({title:excluir.title}).from('lessons').where({id:excluir.id})
+    return response.status(200).send({status:"deletado"})
+    
+  } catch (e) {
+    return response.status(500).send({error: e?.message || e})
+  }
+}

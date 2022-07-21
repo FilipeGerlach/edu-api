@@ -13,15 +13,18 @@ routes.get('/', IndexController.index);
 //rotas de cursos
 routes.post('/courses', CoursesController.create);
 routes.patch('/courses/:id', CoursesController.update)
+routes.delete('/courses/:id', CoursesController.deleteCourse)
 
 routes.get('/courses', CoursesController.find);
 routes.get('/courses/:id', CoursesController.findById)
 
 routes.post('/instructors', InstructorsController.create);
 routes.patch('/instructors/:id', InstructorsController.update)
+routes.delete('/instructors/:id', InstructorsController.deleteInstructor)
 
 routes.post('/lessons', LessonsController.create);
 routes.get('/lessons/:id', LessonsController.findById)
+routes.delete('/lessons/:id', LessonsController.deleteLessons)
 
 module.exports = routes;
 
